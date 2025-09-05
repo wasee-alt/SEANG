@@ -1,0 +1,534 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.2">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 10.7px 0.0px; font: 16.0px Helvetica; color: #000000; color: rgba(0, 0, 0, 0.85); -webkit-text-stroke: rgba(0, 0, 0, 0.85)}
+    p.p2 {margin: 0.0px 0.0px 10.7px 0.0px; font: 16.0px Thonburi; color: #000000; color: rgba(0, 0, 0, 0.85); -webkit-text-stroke: rgba(0, 0, 0, 0.85)}
+    span.s1 {font-kerning: none; background-color: #ffffff}
+    span.s2 {font: 16.0px Thonburi; font-kerning: none; background-color: #ffffff}
+    span.s3 {font: 16.0px Helvetica; font-kerning: none; background-color: #ffffff}
+    span.s4 {font: 16.0px 'Times New Roman'; font-kerning: none; background-color: #ffffff}
+    span.s5 {font: 16.0px Times; font-kerning: none; background-color: #ffffff}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1">&lt;!doctype html&gt; </span></p>
+<p class="p1"><span class="s1">&lt;html lang="th"&gt; </span></p>
+<p class="p1"><span class="s1">&lt;head&gt; </span></p>
+<p class="p1"><span class="s1">&lt;meta charset="utf-8" /&gt; </span></p>
+<p class="p1"><span class="s1">&lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt; </span></p>
+<p class="p1"><span class="s1">&lt;title&gt;S.E.A.N.G • ProPlugin (Surface/On-wall &amp; Ceiling Quality Levels + Dynamic Tap)&lt;/title&gt; </span></p>
+<p class="p1"><span class="s1">&lt;style&gt; </span></p>
+<p class="p1"><span class="s1">:root { --gap:12px; --font: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Thai", sans-serif; } </span></p>
+<p class="p1"><span class="s1">html,body{height:100%} </span></p>
+<p class="p1"><span class="s1">body{margin:0; font-family:var(--font); background:#0f172a; color:#e2e8f0;} </span></p>
+<p class="p1"><span class="s1">header{padding:16px 20px; border-bottom:1px solid #334155; display:flex; align-items:center; gap:12px;} </span></p>
+<p class="p1"><span class="s1">header h1{font-size:18px; margin:0;} </span></p>
+<p class="p1"><span class="s1">main{display:grid; grid-template-columns: 460px 1fr; gap:20px; padding:20px;} </span></p>
+<p class="p1"><span class="s1">fieldset{border:1px solid #334155; border-radius:10px; padding:14px; margin:0 0 16px 0;} </span></p>
+<p class="p1"><span class="s1">legend{padding:0 6px; color:#93c5fd;} </span></p>
+<p class="p1"><span class="s1">label{display:block; font-size:13px; margin:10px 0 4px;} </span></p>
+<p class="p1"><span class="s1">input, select{width:100%; padding:10px; border:1px solid #475569; border-radius:8px; background:#0b1220; color:#e2e8f0;} </span></p>
+<p class="p1"><span class="s1">.row{display:grid; grid-template-columns:1fr 1fr; gap:10px;} </span></p>
+<p class="p1"><span class="s1">button{padding:12px 14px; border:0; border-radius:10px; background:#2563eb; color:#fff; font-weight:600; cursor:pointer;} </span></p>
+<p class="p1"><span class="s1">button.secondary{background:#1f2937} </span></p>
+<p class="p1"><span class="s1">.panel{background:#0b1220; border:1px solid #334155; border-radius:12px; padding:12px;} </span></p>
+<p class="p1"><span class="s1">#canvas{width:100%; height:580px; background:#020617; border:1px solid #334155; border-radius:12px;} </span></p>
+<p class="p1"><span class="s1">.kpi{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:12px} </span></p>
+<p class="p1"><span class="s1">.kpi div{background:#0b1220; border:1px solid #334155; border-radius:10px; padding:10px;} </span></p>
+<p class="p1"><span class="s1">.kpi .label{font-size:12px; color:#93a1b2;} </span></p>
+<p class="p1"><span class="s1">.kpi .value{font-size:18px; font-weight:700;} </span></p>
+<p class="p1"><span class="s1">.note{font-size:12px; color:#93a1b2; margin-top:6px} </span></p>
+<p class="p1"><span class="s1">.err{margin-top:10px; padding:10px; border:1px solid #7f1d1d; background:#450a0a; color:#fecaca; border-radius:10px; display:none} </span></p>
+<p class="p1"><span class="s1">@media (max-width: 1180px){ .kpi{grid-template-columns:repeat(2,1fr)} } </span></p>
+<p class="p1"><span class="s1">@media (max-width: 1024px){ main{grid-template-columns:1fr} } </span></p>
+<p class="p1"><span class="s1">&lt;/style&gt; </span></p>
+<p class="p1"><span class="s1">&lt;/head&gt; </span></p>
+<p class="p1"><span class="s1">&lt;body&gt; </span></p>
+<p class="p1"><span class="s1">&lt;header&gt; </span></p>
+<p class="p1"><span class="s1">  &lt;h1&gt;S.E.A.N.G (Simple Estimator for Audio Network Grid)&lt;/h1&gt; </span></p>
+<p class="p1"><span class="s1">  &lt;div style="margin-left:auto; font-size:12px;opacity:.75"&gt;ProPlugin • Surface/On-wall &amp; Ceiling Levels&lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">&lt;/header&gt; </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">&lt;main&gt; </span></p>
+<p class="p1"><span class="s1">  &lt;section&gt; </span></p>
+<p class="p1"><span class="s1">    &lt;form id="form"&gt; </span></p>
+<p class="p1"><span class="s1">      &lt;fieldset&gt; </span></p>
+<p class="p1"><span class="s1">        &lt;legend&gt;</span><span class="s2">หน่วย</span><span class="s1"> &amp; </span><span class="s2">ขนาดห้อง</span><span class="s1">&lt;/legend&gt; </span></p>
+<p class="p1"><span class="s1">        &lt;div class="row"&gt; </span></p>
+<p class="p1"><span class="s1">          &lt;div&gt; </span></p>
+<p class="p1"><span class="s1">            &lt;label&gt;</span><span class="s2">หน่วย</span><span class="s1"> (Units)&lt;/label&gt; </span></p>
+<p class="p1"><span class="s1">            &lt;select id="units"&gt;&lt;option value="m"&gt;</span><span class="s2">เมตร</span><span class="s1"> (m)&lt;/option&gt;&lt;option value="ft"&gt;</span><span class="s2">ฟุต</span><span class="s1"> (ft)&lt;/option&gt;&lt;/select&gt; </span></p>
+<p class="p1"><span class="s1">          &lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">          &lt;div&gt; </span></p>
+<p class="p1"><span class="s1">            &lt;label&gt;</span><span class="s2">เลย์เอาต์กริด</span><span class="s1"> (</span><span class="s2">ใช้กับ</span><span class="s1"> Ceiling)&lt;/label&gt; </span></p>
+<p class="p1"><span class="s1">            &lt;select id="layout"&gt;&lt;option value="square"&gt;Square&lt;/option&gt;&lt;option value="hex"&gt;Hex&lt;/option&gt;&lt;/select&gt; </span></p>
+<p class="p1"><span class="s1">          &lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">        &lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">        &lt;div class="row"&gt; </span></p>
+<p class="p1"><span class="s1">          &lt;div&gt;&lt;label&gt;</span><span class="s2">กว้าง</span><span class="s1"> (Width)&lt;/label&gt;&lt;input type="text" id="roomW" value="12"&gt;&lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">          &lt;div&gt;&lt;label&gt;</span><span class="s2">ยาว</span><span class="s1"> (Length)&lt;/label&gt;&lt;input type="text" id="roomL" value="18"&gt;&lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">        &lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">        &lt;div class="row"&gt; </span></p>
+<p class="p1"><span class="s1">          &lt;div&gt;&lt;label&gt;</span><span class="s2">สูงเพดาน</span><span class="s1"> (Ceiling)&lt;/label&gt;&lt;input type="text" id="roomH" value="3.2"&gt;&lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">          &lt;div&gt; </span></p>
+<p class="p1"><span class="s1">            &lt;label&gt;</span><span class="s2">ความสูงผู้ฟัง</span><span class="s1">&lt;/label&gt; </span></p>
+<p class="p1"><span class="s1">            &lt;select id="listenerPreset"&gt; </span></p>
+<p class="p1"><span class="s1">              &lt;option value="standing"&gt;</span><span class="s2">ยืน</span><span class="s1"> (1.5 m)&lt;/option&gt; </span></p>
+<p class="p1"><span class="s1">              &lt;option value="seated" selected&gt;</span><span class="s2">นั่ง</span><span class="s1"> (1.2 m)&lt;/option&gt; </span></p>
+<p class="p1"><span class="s1">              &lt;option value="custom"&gt;</span><span class="s2">กำหนดเอง</span><span class="s1">&lt;/option&gt; </span></p>
+<p class="p1"><span class="s1">            &lt;/select&gt; </span></p>
+<p class="p1"><span class="s1">          &lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">        &lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">        &lt;div class="row" id="listenerCustomRow" style="display:none"&gt; </span></p>
+<p class="p1"><span class="s1">          &lt;div&gt;&lt;label&gt;Listener Height&lt;/label&gt;&lt;input type="text" id="listenerH" value="1.2"&gt;&lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">        &lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">      &lt;/fieldset&gt; </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">      &lt;fieldset&gt; </span></p>
+<p class="p1"><span class="s1">        &lt;legend&gt;</span><span class="s2">แบรนด์</span><span class="s1"> / </span><span class="s2">รุ่น</span><span class="s1">&lt;/legend&gt; </span></p>
+<p class="p1"><span class="s1">        &lt;div class="row"&gt; </span></p>
+<p class="p1"><span class="s1">          &lt;div&gt; </span></p>
+<p class="p1"><span class="s1">            &lt;label&gt;</span><span class="s2">แบรนด์</span><span class="s1">&lt;/label&gt; </span></p>
+<p class="p1"><span class="s1">            &lt;select id="brand"&gt; </span></p>
+<p class="p1"><span class="s1">              &lt;option value=""&gt;— </span><span class="s2">เลือกแบรนด์</span><span class="s1"> —&lt;/option&gt; </span></p>
+<p class="p1"><span class="s1">              &lt;option value="optimal"&gt;Optimal Audio&lt;/option&gt; </span></p>
+<p class="p1"><span class="s1">              &lt;option value="hh"&gt;HH&lt;/option&gt; </span></p>
+<p class="p1"><span class="s1">            &lt;/select&gt; </span></p>
+<p class="p1"><span class="s1">          &lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">          &lt;div&gt; </span></p>
+<p class="p1"><span class="s1">            &lt;label&gt;</span><span class="s2">รุ่น</span><span class="s1"> (Preset)&lt;/label&gt; </span></p>
+<p class="p1"><span class="s1">            &lt;select id="model"&gt;&lt;option value=""&gt;— </span><span class="s2">เลือกรุ่น</span><span class="s1"> —&lt;/option&gt;&lt;/select&gt; </span></p>
+<p class="p1"><span class="s1">          &lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">        &lt;/div&gt; </span></p>
+<p class="p2"><span class="s3">        &lt;div class="note"&gt;</span><span class="s1">เลือกแบรนด์</span><span class="s3">/</span><span class="s1">รุ่น</span><span class="s3"> </span><span class="s4">→</span><span class="s3"> </span><span class="s1">ระบบจะตั้งค่าชนิด</span><span class="s3">/</span><span class="s1">มุมครอบคลุม</span><span class="s3">/</span><span class="s1">ความไว</span><span class="s3"> </span><span class="s1">และ</span><span class="s3"> &lt;b&gt;</span><span class="s1">ชุด</span><span class="s3"> Tap&lt;/b&gt; </span><span class="s1">ของรุ่นนั้นให้อัตโนมัติ</span><span class="s3">&lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">      &lt;/fieldset&gt; </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">      &lt;fieldset&gt; </span></p>
+<p class="p1"><span class="s1">        &lt;legend&gt;</span><span class="s2">พารามิเตอร์ลำโพง</span><span class="s1">&lt;/legend&gt; </span></p>
+<p class="p1"><span class="s1">        &lt;div class="row"&gt; </span></p>
+<p class="p1"><span class="s1">          &lt;div&gt; </span></p>
+<p class="p1"><span class="s1">            &lt;label&gt;</span><span class="s2">ชนิดลำโพง</span><span class="s1">&lt;/label&gt; </span></p>
+<p class="p1"><span class="s1">            &lt;select id="spkType"&gt; </span></p>
+<p class="p1"><span class="s1">              &lt;option value="ceiling"&gt;Ceiling&lt;/option&gt; </span></p>
+<p class="p1"><span class="s1">              &lt;option value="pendant"&gt;Pendant&lt;/option&gt; </span></p>
+<p class="p1"><span class="s1">              &lt;option value="surface"&gt;Surface-mount / On-wall&lt;/option&gt; </span></p>
+<p class="p1"><span class="s1">            &lt;/select&gt; </span></p>
+<p class="p1"><span class="s1">          &lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">          &lt;div&gt; </span></p>
+<p class="p1"><span class="s1">            &lt;label&gt;</span><span class="s2">ระดับคุณภาพเสียง</span><span class="s1"> (</span><span class="s2">เฉพาะ</span><span class="s1"> Ceiling)&lt;/label&gt; </span></p>
+<p class="p1"><span class="s1">            &lt;select id="quality"&gt; </span></p>
+<p class="p1"><span class="s1">              &lt;option value="high" selected&gt;</span><span class="s2">สูง</span><span class="s1"> (start=H/2, step=H)&lt;/option&gt; </span></p>
+<p class="p1"><span class="s1">              &lt;option value="mid"&gt;</span><span class="s2">ปานกลาง</span><span class="s1"> (start=H, step=1.5H)&lt;/option&gt; </span></p>
+<p class="p1"><span class="s1">              &lt;option value="low"&gt;</span><span class="s2">ต่ำ</span><span class="s1">/budget (start=H, step=2H)&lt;/option&gt; </span></p>
+<p class="p1"><span class="s1">            &lt;/select&gt; </span></p>
+<p class="p1"><span class="s1">          &lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">        &lt;/div&gt; </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">        &lt;div class="row"&gt; </span></p>
+<p class="p1"><span class="s1">          &lt;div&gt;&lt;label&gt;</span><span class="s2">มุมครอบคลุม</span><span class="s1"> (°)&lt;/label&gt;&lt;input type="text" id="coverage" value="120"&gt;&lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">          &lt;div&gt;&lt;label&gt;Sensitivity (dB @1W/1m)&lt;/label&gt;&lt;input type="text" id="sens" value="88"&gt;&lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">        &lt;/div&gt; </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">        &lt;div class="row"&gt; </span></p>
+<p class="p1"><span class="s1">          &lt;div&gt; </span></p>
+<p class="p1"><span class="s1">            &lt;label&gt;Tap 70V/100V (</span><span class="s2">เฉพาะรุ่น</span><span class="s1">)&lt;/label&gt; </span></p>
+<p class="p1"><span class="s1">            &lt;select id="tapSelect"&gt; </span></p>
+<p class="p1"><span class="s1">              &lt;option value="auto" selected&gt;Auto (</span><span class="s2">แนะนำจากรุ่นนี้</span><span class="s1">)&lt;/option&gt; </span></p>
+<p class="p1"><span class="s1">            &lt;/select&gt; </span></p>
+<p class="p1"><span class="s1">          &lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">          &lt;div&gt;&lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">        &lt;/div&gt; </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">        &lt;div class="row" id="tapCustomRow" style="display:none"&gt; </span></p>
+<p class="p1"><span class="s1">          &lt;div&gt;&lt;label&gt;Custom Tap (</span><span class="s2">คอมมาแยก</span><span class="s1"> </span><span class="s2">ถ้ารุ่นไม่ระบุ</span><span class="s1">)&lt;/label&gt;&lt;input type="text" id="tapCustom" placeholder="</span><span class="s2">เช่น</span><span class="s1"> 2,4,8,16"&gt;&lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">          &lt;div&gt;&lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">        &lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">      &lt;/fieldset&gt; </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">      &lt;div class="row"&gt; </span></p>
+<p class="p1"><span class="s1">        &lt;button type="button" id="calcBtn"&gt;</span><span class="s2">คำนวณ</span><span class="s1">&lt;/button&gt; </span></p>
+<p class="p1"><span class="s1">        &lt;button type="button" class="secondary" id="clearBtn"&gt;</span><span class="s2">ล้างค่า</span><span class="s1">&lt;/button&gt; </span></p>
+<p class="p1"><span class="s1">      &lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">      &lt;div class="err" id="err"&gt;&lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">    &lt;/form&gt; </span></p>
+<p class="p1"><span class="s1">  &lt;/section&gt; </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">  &lt;section class="panel"&gt; </span></p>
+<p class="p1"><span class="s1">    &lt;canvas id="canvas"&gt;&lt;/canvas&gt; </span></p>
+<p class="p1"><span class="s1">    &lt;div class="kpi"&gt; </span></p>
+<p class="p1"><span class="s1">      &lt;div&gt;&lt;div class="label"&gt;</span><span class="s2">จำนวนลำโพง</span><span class="s1">&lt;/div&gt;&lt;div class="value" id="kCount"&gt;-&lt;/div&gt;&lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">      &lt;div&gt;&lt;div class="label"&gt;</span><span class="s2">ระยะวาง</span><span class="s1"> (C–C)&lt;/div&gt;&lt;div class="value" id="kSpacing"&gt;-&lt;/div&gt;&lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">      &lt;div&gt;&lt;div class="label"&gt;Tap </span><span class="s2">แนะนำ</span><span class="s1">/</span><span class="s2">ที่เลือก</span><span class="s1">&lt;/div&gt;&lt;div class="value" id="kTap"&gt;-&lt;/div&gt;&lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">      &lt;div&gt;&lt;div class="label"&gt;</span><span class="s2">รวมโหลด</span><span class="s1"> (W)&lt;/div&gt;&lt;div class="value" id="kTotalW"&gt;-&lt;/div&gt;&lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">    &lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">    &lt;div id="summary" style="margin-top:12px;font-size:13px"&gt;&lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">    &lt;div id="ampBox" style="margin-top:8px; font-size:13px; padding:10px; border:1px solid #334155; border-radius:10px;"&gt; </span></p>
+<p class="p1"><span class="s1">      &lt;div style="opacity:.9"&gt;</span><span class="s2">กำลังแอมป์ที่แนะนำ</span><span class="s1"> (</span><span class="s2">เผื่อ</span><span class="s1"> headroom): &lt;b id="kAmpRec"&gt;-&lt;/b&gt;&lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">      &lt;div style="opacity:.7; margin-top:4px"&gt;</span><span class="s2">เกณฑ์</span><span class="s1">: </span><span class="s2">รวมโหลด</span><span class="s1"> × &lt;span id="kHeadroomPct"&gt;1.25×&lt;/span&gt; </span><span class="s2">ปัดขึ้นเป็นขนาดมาตรฐานใกล้สุด</span><span class="s1">&lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">    &lt;/div&gt; </span></p>
+<p class="p1"><span class="s1">  &lt;/section&gt; </span></p>
+<p class="p1"><span class="s1">&lt;/main&gt; </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">&lt;script&gt; </span></p>
+<p class="p1"><span class="s1">// ========= helpers ========= </span></p>
+<p class="p1"><span class="s1">const $=id=&gt;document.getElementById(id); </span></p>
+<p class="p1"><span class="s1">const toRad=deg=&gt;deg*Math.PI/180; </span></p>
+<p class="p1"><span class="s1">function sanitizeNum(v){v=String(v??'').replace(',', '.').replace(/[^\d\.\-]/g,'');const n=parseFloat(v);return isNaN(n)?null:n;} </span></p>
+<p class="p1"><span class="s1">function fmt(v,u){return(u==='m')?v.toFixed(2)+' m':(v*3.28084).toFixed(2)+' ft';} </span></p>
+<p class="p1"><span class="s1">function fromUnits(v,u){return(u==='m')?v:v/3.28084;} </span></p>
+<p class="p1"><span class="s1">function nearestTap(p,taps){if(!taps||!taps.length||!isFinite(p)||p&lt;=0) return null;let best=taps[0],d=Math.abs(taps[0]-p);for(const t of taps){const dd=Math.abs(t-p);if(dd&lt;d){d=dd;best=t;}}for(const t of taps){if(t&gt;=p) return t;}return best;} </span></p>
+<p class="p1"><span class="s1">function showErr(m){$('err').style.display='block';$('err').textContent=m;} </span></p>
+<p class="p1"><span class="s1">function clearErr(){$('err').style.display='none';} </span></p>
+<p class="p1"><span class="s1">const HEADROOM = 1.25; // 25% headroom </span></p>
+<p class="p1"><span class="s1">const AMP_STEPS = [30, 60, 100, 120, 150, 240, 300, 350, 500, 600, 1000]; // </span><span class="s2">ตัวอย่างไซส์มาตรฐาน</span><span class="s5"> </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">// ========= Presets (</span><span class="s2">เริ่มต้น</span><span class="s1"> — </span><span class="s2">เพิ่มจากสเปกจริงได้</span><span class="s1">) ========= </span></p>
+<p class="p1"><span class="s1">// Optimal Audio: Up series (ceiling), Cuboid TX (surface) </span></p>
+<p class="p1"><span class="s1">// HH: TNi series (ceiling), APT series (ceiling) — </span><span class="s2">เพิ่ม</span><span class="s1">/</span><span class="s2">แก้ค่าตามสเปกจริงได้</span><span class="s5"> </span></p>
+<p class="p1"><span class="s1">const PRESETS={ </span></p>
+<p class="p1"><span class="s1">  optimal:{label:'Optimal Audio',models:{ </span></p>
+<p class="p1"><span class="s1">    // Up series (</span><span class="s2">ตัวอย่างค่า</span><span class="s1">) </span></p>
+<p class="p1"><span class="s1">    'Up 3 (Ceiling)':{type:'ceiling',coverage:120,sens:86,taps:'1.5,3,6,12'}, </span></p>
+<p class="p1"><span class="s1">    'Up 4 (Ceiling)':{type:'ceiling',coverage:120,sens:87,taps:'3.2,6.3,12.5,25'}, </span></p>
+<p class="p1"><span class="s1">    'Up 6 (Ceiling)':{type:'ceiling',coverage:110,sens:90,taps:'7.5,15,30,60'}, </span></p>
+<p class="p1"><span class="s1">    // Cuboid TX (</span><span class="s2">เฉพาะ</span><span class="s1"> TX) — on-wall </span></p>
+<p class="p1"><span class="s1">    'Cuboid 3TX (Surface)':{type:'surface',coverage:90,sens:86,taps:'7.5,15,30'}, </span></p>
+<p class="p1"><span class="s1">    'Cuboid 5TX (Surface)':{type:'surface',coverage:90,sens:87,taps:'15,30,60'}, </span></p>
+<p class="p1"><span class="s1">    'Cuboid 6TX (Surface)':{type:'surface',coverage:90,sens:88,taps:'15,30,60'} </span></p>
+<p class="p1"><span class="s1">  }}, </span></p>
+<p class="p1"><span class="s1">  hh:{label:'HH',models:{ </span></p>
+<p class="p1"><span class="s1">    // TNi series (ceiling) </span></p>
+<p class="p1"><span class="s1">    'TNi-C6 (Ceiling)':{type:'ceiling',coverage:120,sens:89,taps:'7.5,15,30,60'}, </span></p>
+<p class="p1"><span class="s1">    'TNi-C8 (Ceiling)':{type:'ceiling',coverage:120,sens:91,taps:'10,20,40,60'}, </span></p>
+<p class="p1"><span class="s1">    // APT series (ceiling) </span></p>
+<p class="p1"><span class="s1">    'APT-C6 (Ceiling)':{type:'ceiling',coverage:120,sens:90,taps:'7.5,15,30,60'}, </span></p>
+<p class="p1"><span class="s1">    'APT-C8 (Ceiling)':{type:'ceiling',coverage:120,sens:92,taps:'10,20,40,60'} </span></p>
+<p class="p1"><span class="s1">  }} </span></p>
+<p class="p1"><span class="s1">}; </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p2"><span class="s3">// </span><span class="s1">เก็บ</span><span class="s3"> taps </span><span class="s1">ปัจจุบันของรุ่น</span><span class="s5"> </span></p>
+<p class="p1"><span class="s1">let currentModelTaps = []; </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">// ========= UI: Brand/Model ========= </span></p>
+<p class="p1"><span class="s1">function refreshModels(){ </span></p>
+<p class="p1"><span class="s1">  const b=$('brand').value;const sel=$('model'); </span></p>
+<p class="p1"><span class="s1">  sel.innerHTML='&lt;option value=""&gt;— </span><span class="s2">เลือกรุ่น</span><span class="s1"> —&lt;/option&gt;'; </span></p>
+<p class="p1"><span class="s1">  if(!b||!PRESETS[b]) return; </span></p>
+<p class="p1"><span class="s1">  for(const k of Object.keys(PRESETS[b].models)){ </span></p>
+<p class="p1"><span class="s1">    const o=document.createElement('option');o.value=k;o.textContent=k;sel.appendChild(o); </span></p>
+<p class="p1"><span class="s1">  } </span></p>
+<p class="p1"><span class="s1">} </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">function populateTapSelectFromModel(preset){ </span></p>
+<p class="p1"><span class="s1">  const tapSel = $('tapSelect'); tapSel.innerHTML = ''; </span></p>
+<p class="p1"><span class="s1">  const optAuto = document.createElement('option'); optAuto.value = 'auto'; optAuto.textContent = 'Auto (</span><span class="s2">แนะนำจากรุ่นนี้</span><span class="s1">)'; tapSel.appendChild(optAuto); </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">  currentModelTaps = []; </span></p>
+<p class="p1"><span class="s1">  if(preset &amp;&amp; preset.taps){ </span></p>
+<p class="p1"><span class="s1">    currentModelTaps = String(preset.taps).split(/[,;]/) </span></p>
+<p class="p1"><span class="s1">      .map(s=&gt;sanitizeNum(s)).filter(v=&gt;isFinite(v)).sort((a,b)=&gt;a-b); </span></p>
+<p class="p1"><span class="s1">  } </span></p>
+<p class="p1"><span class="s1">  if(currentModelTaps.length){ </span></p>
+<p class="p1"><span class="s1">    for(const t of currentModelTaps){ </span></p>
+<p class="p1"><span class="s1">      const o=document.createElement('option'); o.value=String(t); o.textContent=`${t} W`; tapSel.appendChild(o); </span></p>
+<p class="p1"><span class="s1">    } </span></p>
+<p class="p1"><span class="s1">    $('tapCustomRow').style.display='none'; </span></p>
+<p class="p1"><span class="s1">    tapSel.disabled = false; </span></p>
+<p class="p1"><span class="s1">  }else{ </span></p>
+<p class="p1"><span class="s1">    const o=document.createElement('option'); o.value='custom'; o.textContent='Custom…'; tapSel.appendChild(o); </span></p>
+<p class="p1"><span class="s1">    tapSel.value='custom'; </span></p>
+<p class="p1"><span class="s1">    $('tapCustomRow').style.display='grid'; </span></p>
+<p class="p1"><span class="s1">  } </span></p>
+<p class="p1"><span class="s1">} </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">function applyModel(){ </span></p>
+<p class="p1"><span class="s1">  const b=$('brand').value,m=$('model').value;if(!b||!m) return; </span></p>
+<p class="p1"><span class="s1">  const p=PRESETS[b]?.models?.[m]; if(!p) return; </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">  $('spkType').value=p.type||'ceiling'; </span></p>
+<p class="p1"><span class="s1">  if(p.coverage!=null) $('coverage').value=p.coverage; </span></p>
+<p class="p1"><span class="s1">  if(p.sens!=null) $('sens').value=p.sens; </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">  populateTapSelectFromModel(p); </span></p>
+<p class="p1"><span class="s1">  toggleTapCustom(); </span></p>
+<p class="p1"><span class="s1">} </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">// </span><span class="s2">แสดง</span><span class="s1">/</span><span class="s2">ซ่อน</span><span class="s1"> custom tap </span></p>
+<p class="p1"><span class="s1">function toggleTapCustom(){ </span></p>
+<p class="p1"><span class="s1">  $('tapCustomRow').style.display = ($('tapSelect').value==='custom') ? 'grid' : 'none'; </span></p>
+<p class="p1"><span class="s1">} </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p2"><span class="s3">// </span><span class="s1">ดึงชุด</span><span class="s3"> taps </span><span class="s1">ที่พร้อมใช้</span><span class="s3"> </span><span class="s1">ณ</span><span class="s3"> </span><span class="s1">ตอนคำนวณ</span><span class="s5"> </span></p>
+<p class="p1"><span class="s1">function getActiveTapArray(){ </span></p>
+<p class="p1"><span class="s1">  const sel = $('tapSelect').value; </span></p>
+<p class="p1"><span class="s1">  if(sel==='custom'){ </span></p>
+<p class="p1"><span class="s1">    const raw = $('tapCustom').value||''; </span></p>
+<p class="p1"><span class="s1">    return raw.split(/[,;]/).map(s=&gt;sanitizeNum(s)).filter(v=&gt;isFinite(v)).sort((a,b)=&gt;a-b); </span></p>
+<p class="p1"><span class="s1">  } </span></p>
+<p class="p1"><span class="s1">  return currentModelTaps.slice(); </span></p>
+<p class="p1"><span class="s1">} </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">// ========= Core Calculator ========= </span></p>
+<p class="p1"><span class="s1">function layout(){ </span></p>
+<p class="p1"><span class="s1">  clearErr(); </span></p>
+<p class="p1"><span class="s1">  const u=$('units').value; </span></p>
+<p class="p1"><span class="s1">  const W=fromUnits(sanitizeNum($('roomW').value),u); </span></p>
+<p class="p1"><span class="s1">  const L=fromUnits(sanitizeNum($('roomL').value),u); </span></p>
+<p class="p1"><span class="s1">  const H=fromUnits(sanitizeNum($('roomH').value),u); </span></p>
+<p class="p1"><span class="s1">  if([W,L,H].some(v=&gt;!isFinite(v)||v&lt;=0)){showErr('</span><span class="s2">ใส่ค่ากว้าง</span><span class="s1">/</span><span class="s2">ยาว</span><span class="s1">/</span><span class="s2">สูง</span><span class="s1"> </span><span class="s2">ให้ถูกต้อง</span><span class="s1">');return;} </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">  const lp=$('listenerPreset').value; </span></p>
+<p class="p1"><span class="s1">  const listenerH=(lp==='standing')?1.5:(lp==='seated')?1.2:fromUnits(sanitizeNum($('listenerH').value)||1.2,u); </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">  const sens=sanitizeNum($('sens').value), theta=sanitizeNum($('coverage').value); </span></p>
+<p class="p1"><span class="s1">  if(!isFinite(sens)||!isFinite(theta)){showErr('</span><span class="s2">ใส่ค่า</span><span class="s1"> Sensitivity/Coverage');return;} </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">  // Base geometry (</span><span class="s2">สำหรับกรณีทั่วไป</span><span class="s1">/</span><span class="s2">สำรอง</span><span class="s1">) </span></p>
+<p class="p1"><span class="s1">  const dVert=Math.max(0.6, H - listenerH); </span></p>
+<p class="p1"><span class="s1">  const D=2*dVert*Math.tan(toRad(theta/2)); </span></p>
+<p class="p1"><span class="s1">  const spacingBase=Math.max(0.1, D*0.7); </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">  const type=$('spkType').value; </span></p>
+<p class="p1"><span class="s1">  let pts=[];  </span></p>
+<p class="p1"><span class="s1">  let spacingShown=null; </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">  if(type==='surface'){ </span></p>
+<p class="p2"><span class="s3">    // --- Surface/On-wall: </span><span class="s1">ผนังซ้าย</span><span class="s3">–</span><span class="s1">ขวาเท่านั้น</span><span class="s3">, </span><span class="s1">ห้ามกึ่งกลางห้อง</span><span class="s3">/</span><span class="s1">ผนังด้านกว้าง</span><span class="s3"> --- </span></p>
+<p class="p2"><span class="s3">    // </span><span class="s1">ระยะตามแนวยาว</span><span class="s3"> 4–6 m </span><span class="s1">ตามความยาวห้อง</span><span class="s5"> </span></p>
+<p class="p1"><span class="s1">    const minS=4, maxS=6; </span></p>
+<p class="p1"><span class="s1">    const nLow=Math.ceil(L/maxS)+1; </span></p>
+<p class="p1"><span class="s1">    const nHigh=Math.max(2, Math.floor(L/minS)+1); </span></p>
+<p class="p1"><span class="s1">    let n=Math.max(2, Math.round(L/5)+1); </span></p>
+<p class="p1"><span class="s1">    n=Math.min(Math.max(n, nLow), nHigh); </span></p>
+<p class="p1"><span class="s1">    const spacingWall=(n&gt;1)?(L/(n-1)):L; </span></p>
+<p class="p1"><span class="s1">    spacingShown=spacingWall; </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">    for(let i=0;i&lt;n;i++){ </span></p>
+<p class="p1"><span class="s1">      const y=i*spacingWall; </span></p>
+<p class="p1"><span class="s1">      pts.push({x:0, y}); // </span><span class="s2">ผนังซ้าย</span><span class="s5"> </span></p>
+<p class="p1"><span class="s1">      pts.push({x:W, y}); // </span><span class="s2">ผนังขวา</span><span class="s5"> </span></p>
+<p class="p1"><span class="s1">    } </span></p>
+<p class="p1"><span class="s1">  } </span></p>
+<p class="p1"><span class="s1">  else if(type==='ceiling'){ </span></p>
+<p class="p1"><span class="s1">    // --- Ceiling: 3 </span><span class="s2">ระดับคุณภาพเสียง</span><span class="s1"> + Centering --- </span></p>
+<p class="p1"><span class="s1">    let start, step; </span></p>
+<p class="p1"><span class="s1">    const q=$('quality').value; </span></p>
+<p class="p1"><span class="s1">    if(q==='high'){ start=H/2; step=H; } </span></p>
+<p class="p1"><span class="s1">    else if(q==='mid'){ start=H; step=1.5*H; } </span></p>
+<p class="p1"><span class="s1">    else { start=H; step=2*H; } // low/budget </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">    // </span><span class="s2">วางจุดแบบกริด</span><span class="s1"> (square/hex) </span><span class="s2">จาก</span><span class="s1"> start/step </span><span class="s2">และเว้นผนังตาม</span><span class="s1"> start </span></p>
+<p class="p1"><span class="s1">    const lay=$('layout').value; </span></p>
+<p class="p1"><span class="s1">    if(lay==='square'){ </span></p>
+<p class="p1"><span class="s1">      const xs=[]; for(let x=start; x&lt;=W-start+1e-9; x+=step){ xs.push(x); } </span></p>
+<p class="p1"><span class="s1">      const ys=[]; for(let y=start; y&lt;=L-start+1e-9; y+=step){ ys.push(y); } </span></p>
+<p class="p1"><span class="s1">      if(xs.length===0){ xs.push(Math.min(W/2, Math.max(start, W-start))); } </span></p>
+<p class="p1"><span class="s1">      if(ys.length===0){ ys.push(Math.min(L/2, Math.max(start, L-start))); } </span></p>
+<p class="p1"><span class="s1">      for(const y of ys){ for(const x of xs){ pts.push({x, y}); } } </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">      // Centering: </span><span class="s2">จัดให้อยู่กึ่งกลางพื้นที่ห้อง</span><span class="s1"> (</span><span class="s2">ภายในขอบ</span><span class="s1"> start..W-start / start..L-start) </span></p>
+<p class="p1"><span class="s1">      const bounds = getBounds(pts); </span></p>
+<p class="p1"><span class="s1">      const cx = (bounds.minX + bounds.maxX) / 2; </span></p>
+<p class="p1"><span class="s1">      const cy = (bounds.minY + bounds.maxY) / 2; </span></p>
+<p class="p1"><span class="s1">      const dx = (W/2 - cx); </span></p>
+<p class="p1"><span class="s1">      const dy = (L/2 - cy); </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p2"><span class="s3">      // </span><span class="s1">จำกัดการเลื่อนเพื่อไม่ให้ทะลุระยะเว้นผนัง</span><span class="s5"> </span></p>
+<p class="p1"><span class="s1">      const minAllowedDx = (start - bounds.minX); </span></p>
+<p class="p1"><span class="s1">      const maxAllowedDx = (W - start - bounds.maxX); </span></p>
+<p class="p1"><span class="s1">      const minAllowedDy = (start - bounds.minY); </span></p>
+<p class="p1"><span class="s1">      const maxAllowedDy = (L - start - bounds.maxY); </span></p>
+<p class="p1"><span class="s1">      const dxClamped = clamp(dx, minAllowedDx, maxAllowedDx); </span></p>
+<p class="p1"><span class="s1">      const dyClamped = clamp(dy, minAllowedDy, maxAllowedDy); </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">      pts = pts.map(p=&gt;({x:p.x+dxClamped, y:p.y+dyClamped})); </span></p>
+<p class="p1"><span class="s1">      spacingShown = step; </span></p>
+<p class="p1"><span class="s1">    }else{ </span></p>
+<p class="p1"><span class="s1">      // hex layout: </span><span class="s2">ระยะ</span><span class="s1"> step </span><span class="s2">ใช้กับแกน</span><span class="s1"> x; </span><span class="s2">ระยะระหว่างแถว</span><span class="s1"> = step*sqrt(3)/2 </span></p>
+<p class="p1"><span class="s1">      const s = step, dy = s*Math.sqrt(3)/2; </span></p>
+<p class="p1"><span class="s1">      // </span><span class="s2">สร้างแถวเริ่มที่</span><span class="s1"> y=start </span><span class="s2">จนถึง</span><span class="s1"> L-start </span></p>
+<p class="p1"><span class="s1">      let y = start; </span></p>
+<p class="p1"><span class="s1">      while (y &lt;= L - start + 1e-9) { </span></p>
+<p class="p2"><span class="s3">        // </span><span class="s1">คอลัมน์ในแถวนั้น</span><span class="s5"> </span></p>
+<p class="p1"><span class="s1">        const offsetX = (Math.round((y-start)/dy) % 2 === 1) ? s/2 : 0; </span></p>
+<p class="p1"><span class="s1">        // </span><span class="s2">หาคอลัมน์ตั้งแต่</span><span class="s1"> start..W-start </span></p>
+<p class="p1"><span class="s1">        let x = start + offsetX; </span></p>
+<p class="p1"><span class="s1">        while (x &lt;= W - start + 1e-9) { </span></p>
+<p class="p1"><span class="s1">          pts.push({x, y}); </span></p>
+<p class="p1"><span class="s1">          x += s; </span></p>
+<p class="p1"><span class="s1">        } </span></p>
+<p class="p1"><span class="s1">        y += dy; </span></p>
+<p class="p1"><span class="s1">      } </span></p>
+<p class="p1"><span class="s1">      if(pts.length===0){ </span></p>
+<p class="p2"><span class="s3">        // </span><span class="s1">สำรองกรณีห้องเล็กมาก</span><span class="s5"> </span></p>
+<p class="p1"><span class="s1">        pts.push({x:clamp(W/2, start, W-start), y:clamp(L/2, start, L-start)}); </span></p>
+<p class="p1"><span class="s1">      } </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">      // Centering (</span><span class="s2">เหมือน</span><span class="s1"> square) </span></p>
+<p class="p1"><span class="s1">      const bounds = getBounds(pts); </span></p>
+<p class="p1"><span class="s1">      const cx = (bounds.minX + bounds.maxX) / 2; </span></p>
+<p class="p1"><span class="s1">      const cy = (bounds.minY + bounds.maxY) / 2; </span></p>
+<p class="p1"><span class="s1">      const dx = (W/2 - cx); </span></p>
+<p class="p1"><span class="s1">      const dy2 = (L/2 - cy); </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">      const minAllowedDx = (start - bounds.minX); </span></p>
+<p class="p1"><span class="s1">      const maxAllowedDx = (W - start - bounds.maxX); </span></p>
+<p class="p1"><span class="s1">      const minAllowedDy = (start - bounds.minY); </span></p>
+<p class="p1"><span class="s1">      const maxAllowedDy = (L - start - bounds.maxY); </span></p>
+<p class="p1"><span class="s1">      const dxClamped = clamp(dx, minAllowedDx, maxAllowedDx); </span></p>
+<p class="p1"><span class="s1">      const dyClamped = clamp(dy2, minAllowedDy, maxAllowedDy); </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">      pts = pts.map(p=&gt;({x:p.x+dxClamped, y:p.y+dyClamped})); </span></p>
+<p class="p1"><span class="s1">      spacingShown = step; </span></p>
+<p class="p1"><span class="s1">    } </span></p>
+<p class="p1"><span class="s1">  } </span></p>
+<p class="p1"><span class="s1">  else{ </span></p>
+<p class="p2"><span class="s3">    // (</span><span class="s1">เผื่อ</span><span class="s3">) </span><span class="s1">กริดทั่วไป</span><span class="s3">: </span><span class="s1">เว้นผนัง</span><span class="s3"> H </span><span class="s1">รอบด้าน</span><span class="s3"> </span><span class="s1">แล้วใช้</span><span class="s3"> spacingBase </span></p>
+<p class="p1"><span class="s1">    const wallMargin=H; </span></p>
+<p class="p1"><span class="s1">    const usableW=W-2*wallMargin, usableL=L-2*wallMargin; </span></p>
+<p class="p1"><span class="s1">    if(usableW&lt;=0||usableL&lt;=0){showErr('</span><span class="s2">ห้องเล็ก</span><span class="s1">/</span><span class="s2">เพดานต่ำเกินไป</span><span class="s1">');return;} </span></p>
+<p class="p1"><span class="s1">    const lay=$('layout').value; </span></p>
+<p class="p1"><span class="s1">    if(lay==='square'){ </span></p>
+<p class="p1"><span class="s1">      const cols=Math.max(1, Math.ceil(usableW/spacingBase)); </span></p>
+<p class="p1"><span class="s1">      const rows=Math.max(1, Math.ceil(usableL/spacingBase)); </span></p>
+<p class="p1"><span class="s1">      const usedW=(cols-1)*spacingBase, usedL=(rows-1)*spacingBase; </span></p>
+<p class="p1"><span class="s1">      const startX=wallMargin+Math.max(0,(usableW-usedW)/2); </span></p>
+<p class="p1"><span class="s1">      const startY=wallMargin+Math.max(0,(usableL-usedL)/2); </span></p>
+<p class="p1"><span class="s1">      for(let r=0;r&lt;rows;r++) for(let c=0;c&lt;cols;c++) pts.push({x:startX+c*spacingBase, y:startY+r*spacingBase}); </span></p>
+<p class="p1"><span class="s1">      spacingShown=spacingBase; </span></p>
+<p class="p1"><span class="s1">    }else{ </span></p>
+<p class="p1"><span class="s1">      const s=spacingBase, dy=s*Math.sqrt(3)/2; </span></p>
+<p class="p1"><span class="s1">      const hexRows=Math.max(1, Math.ceil(usableL/dy)); </span></p>
+<p class="p1"><span class="s1">      const usedLhex=(hexRows-1)*dy, offY=wallMargin+Math.max(0,(usableL-usedLhex)/2); </span></p>
+<p class="p1"><span class="s1">      for(let r=0;r&lt;hexRows;r++){ </span></p>
+<p class="p1"><span class="s1">        const offsetX=(r%2===1)?s/2:0; </span></p>
+<p class="p1"><span class="s1">        const colsHex=Math.max(1, Math.ceil((usableW-offsetX)/s)); </span></p>
+<p class="p1"><span class="s1">        const usedWhex=(colsHex-1)*s, offX=wallMargin+Math.max(0,(usableW-usedWhex)/2); </span></p>
+<p class="p1"><span class="s1">        for(let c=0;c&lt;colsHex;c++) pts.push({x:offX+offsetX+c*s, y:offY+r*dy}); </span></p>
+<p class="p1"><span class="s1">      } </span></p>
+<p class="p1"><span class="s1">      spacingShown=spacingBase; </span></p>
+<p class="p1"><span class="s1">    } </span></p>
+<p class="p1"><span class="s1">  } </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p2"><span class="s3">  // Tap: </span><span class="s1">ใช้ชุดของรุ่นนั้นแบบไดนามิก</span><span class="s5"> </span></p>
+<p class="p1"><span class="s1">  const tapsArr = getActiveTapArray(); </span></p>
+<p class="p1"><span class="s1">  const tapSelVal = $('tapSelect').value; </span></p>
+<p class="p1"><span class="s1">  const P_req = 1.5; // placeholder; </span><span class="s2">ปรับสูตรตาม</span><span class="s1"> SPL Target </span><span class="s2">ได้ภายหลัง</span><span class="s5"> </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">  let chosenTap = null; </span></p>
+<p class="p1"><span class="s1">  if(tapSelVal === 'auto'){ </span></p>
+<p class="p1"><span class="s1">    chosenTap = nearestTap(P_req, tapsArr); </span></p>
+<p class="p1"><span class="s1">  }else if(tapSelVal === 'custom'){ </span></p>
+<p class="p1"><span class="s1">    chosenTap = nearestTap(P_req, tapsArr); </span></p>
+<p class="p1"><span class="s1">  }else{ </span></p>
+<p class="p1"><span class="s1">    const v = sanitizeNum(tapSelVal); </span></p>
+<p class="p1"><span class="s1">    chosenTap = isFinite(v) ? v : nearestTap(P_req, tapsArr); </span></p>
+<p class="p1"><span class="s1">  } </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p2"><span class="s3">  // </span><span class="s1">รวมโหลดและแอมป์แนะนำ</span><span class="s5"> </span></p>
+<p class="p1"><span class="s1">  const count = pts.length; </span></p>
+<p class="p1"><span class="s1">  const totalW = (chosenTap!=null) ? (count * chosenTap) : null; </span></p>
+<p class="p1"><span class="s1">  const ampRecommendedW = (totalW!=null) ? pickAmpSize(totalW * HEADROOM) : null; </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p2"><span class="s3">  // </span><span class="s1">วาดและสรุป</span><span class="s5"> </span></p>
+<p class="p1"><span class="s1">  drawRoom(W,L,pts,u,type); </span></p>
+<p class="p1"><span class="s1">  $('kCount').textContent=count; </span></p>
+<p class="p1"><span class="s1">  $('kSpacing').textContent=spacingShown?fmt(spacingShown,u):'-'; </span></p>
+<p class="p1"><span class="s1">  $('kTap').textContent=(chosenTap!=null)?(chosenTap+' W'):'-'; </span></p>
+<p class="p1"><span class="s1">  $('kTotalW').textContent=(totalW!=null)?(totalW.toFixed(1)+' W'):'-'; </span></p>
+<p class="p1"><span class="s1">  $('kHeadroomPct').textContent = HEADROOM.toFixed(2)+'×'; </span></p>
+<p class="p1"><span class="s1">  $('kAmpRec').textContent = (ampRecommendedW!=null)?(ampRecommendedW+' W (</span><span class="s2">ขั้นต่ำ</span><span class="s1">)'):'-'; </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">  const modelText = $('model').value || '-'; </span></p>
+<p class="p1"><span class="s1">  const typeText = $('spkType').value; </span></p>
+<p class="p1"><span class="s1">  $('summary').innerHTML=`</span><span class="s2">รุ่น</span><span class="s1"> &lt;b&gt;${modelText}&lt;/b&gt; • </span><span class="s2">ชนิด</span><span class="s1"> &lt;b&gt;${typeText}&lt;/b&gt; • </span><span class="s2">จุด</span><span class="s1"> &lt;b&gt;${count}&lt;/b&gt;`; </span></p>
+<p class="p1"><span class="s1">} </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">function pickAmpSize(w){ </span></p>
+<p class="p1"><span class="s1">  for(const s of AMP_STEPS){ if(s&gt;=w-1e-6) return s; } </span></p>
+<p class="p1"><span class="s1">  return Math.ceil(w/100)*100; // </span><span class="s2">ถ้าเกิน</span><span class="s1"> list </span><span class="s2">ให้ปัดขึ้นทีละ</span><span class="s1"> 100 W </span></p>
+<p class="p1"><span class="s1">} </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">function getBounds(pts){ </span></p>
+<p class="p1"><span class="s1">  let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity; </span></p>
+<p class="p1"><span class="s1">  for(const p of pts){ if(p.x&lt;minX)minX=p.x; if(p.x&gt;maxX)maxX=p.x; if(p.y&lt;minY)minY=p.y; if(p.y&gt;maxY)maxY=p.y; } </span></p>
+<p class="p1"><span class="s1">  return {minX,maxX,minY,maxY}; </span></p>
+<p class="p1"><span class="s1">} </span></p>
+<p class="p1"><span class="s1">function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); } </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">function drawRoom(Wm,Lm,pts,u,type='ceiling'){ </span></p>
+<p class="p1"><span class="s1">  const c=$('canvas'),ctx=c.getContext('2d'); </span></p>
+<p class="p1"><span class="s1">  const dpi=window.devicePixelRatio||1; </span></p>
+<p class="p1"><span class="s1">  c.width=c.clientWidth*dpi; c.height=c.clientHeight*dpi; ctx.setTransform(dpi,0,0,dpi,0,0); </span></p>
+<p class="p1"><span class="s1">  ctx.clearRect(0,0,c.clientWidth,c.clientHeight); </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">  const pad=30, w=c.clientWidth, h=c.clientHeight; </span></p>
+<p class="p1"><span class="s1">  const sx=(w-2*pad)/Wm, sy=(h-2*pad)/Lm, s=Math.min(sx,sy); </span></p>
+<p class="p1"><span class="s1">  const ox=(w - Wm*s)/2, oy=(h - Lm*s)/2; </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p2"><span class="s3">  // </span><span class="s1">เส้นขอบห้อง</span><span class="s5"> </span></p>
+<p class="p1"><span class="s1">  ctx.strokeStyle='#475569'; ctx.lineWidth=2; </span></p>
+<p class="p1"><span class="s1">  ctx.strokeRect(ox, oy, Wm*s, Lm*s); </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p2"><span class="s3">  // </span><span class="s1">เน้นผนังซ้าย</span><span class="s3">/</span><span class="s1">ขวาในโหมด</span><span class="s3"> surface (</span><span class="s1">บอกให้รู้ว่าติดผนังเท่านั้น</span><span class="s3">) </span></p>
+<p class="p1"><span class="s1">  if(type==='surface'){ </span></p>
+<p class="p1"><span class="s1">    ctx.fillStyle='rgba(59,130,246,0.12)'; </span></p>
+<p class="p1"><span class="s1">    ctx.fillRect(ox-2, oy, 4, Lm*s);              // </span><span class="s2">ซ้าย</span><span class="s5"> </span></p>
+<p class="p1"><span class="s1">    ctx.fillRect(ox+Wm*s-2, oy, 4, Lm*s);         // </span><span class="s2">ขวา</span><span class="s5"> </span></p>
+<p class="p1"><span class="s1">  } </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p2"><span class="s3">  // </span><span class="s1">จุดลำโพง</span><span class="s5"> </span></p>
+<p class="p1"><span class="s1">  for(const p of pts){ </span></p>
+<p class="p1"><span class="s1">    const x=ox+p.x*s, y=oy+p.y*s; </span></p>
+<p class="p1"><span class="s1">    ctx.beginPath(); </span></p>
+<p class="p1"><span class="s1">    if(type==='surface'){ </span></p>
+<p class="p1"><span class="s1">      ctx.moveTo(x, y-6); ctx.lineTo(x+6,y+6); ctx.lineTo(x-6,y+6); ctx.closePath(); </span></p>
+<p class="p1"><span class="s1">      ctx.fillStyle='#f59e0b'; ctx.fill(); </span></p>
+<p class="p1"><span class="s1">    }else if(type==='pendant'){ </span></p>
+<p class="p1"><span class="s1">      ctx.rect(x-5, y-5, 10, 10); ctx.fillStyle='#38bdf8'; ctx.fill(); </span></p>
+<p class="p1"><span class="s1">    }else{ </span></p>
+<p class="p1"><span class="s1">      ctx.arc(x, y, 5, 0, Math.PI*2); ctx.fillStyle='#38bdf8'; ctx.fill(); </span></p>
+<p class="p1"><span class="s1">    } </span></p>
+<p class="p1"><span class="s1">  } </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">  // </span><span class="s2">สเกล</span><span class="s5"> </span></p>
+<p class="p1"><span class="s1">  ctx.fillStyle='#94a3b8'; ctx.font='14px sans-serif'; </span></p>
+<p class="p1"><span class="s1">  ctx.fillText(`W: ${fmt(Wm,'m')}`, ox, oy-8); </span></p>
+<p class="p1"><span class="s1">  ctx.save(); ctx.translate(ox-8, oy+12); ctx.rotate(-Math.PI/2); </span></p>
+<p class="p1"><span class="s1">  ctx.fillText(`L: ${fmt(Lm,'m')}`, 0, 0); ctx.restore(); </span></p>
+<p class="p1"><span class="s1">} </span></p>
+<p class="p1"><span class="s1"> </span></p>
+<p class="p1"><span class="s1">// ========= events ========= </span></p>
+<p class="p1"><span class="s1">$('brand').addEventListener('change', refreshModels); </span></p>
+<p class="p1"><span class="s1">$('model').addEventListener('change', applyModel); </span></p>
+<p class="p1"><span class="s1">$('listenerPreset').addEventListener('change', e=&gt;{ </span></p>
+<p class="p1"><span class="s1">  $('listenerCustomRow').style.display=(e.target.value==='custom')?'grid':'none'; </span></p>
+<p class="p1"><span class="s1">}); </span></p>
+<p class="p1"><span class="s1">$('tapSelect').addEventListener('change', toggleTapCustom); </span></p>
+<p class="p1"><span class="s1">$('spkType').addEventListener('change', ()=&gt;{ </span></p>
+<p class="p2"><span class="s3">  // </span><span class="s1">เปิด</span><span class="s3">/</span><span class="s1">ปิดตัวเลือกคุณภาพเมื่อสลับชนิดลำโพง</span><span class="s5"> </span></p>
+<p class="p1"><span class="s1">  const dis = ($('spkType').value!=='ceiling'); </span></p>
+<p class="p1"><span class="s1">  $('quality').disabled = dis; </span></p>
+<p class="p1"><span class="s1">}); </span></p>
+<p class="p1"><span class="s1">$('calcBtn').addEventListener('click', layout); </span></p>
+<p class="p1"><span class="s1">$('clearBtn').addEventListener('click', ()=&gt;{ </span></p>
+<p class="p1"><span class="s1">  $('form').reset(); clearErr(); </span></p>
+<p class="p1"><span class="s1">  currentModelTaps = []; </span></p>
+<p class="p1"><span class="s1">  $('tapSelect').innerHTML='&lt;option value="auto" selected&gt;Auto (</span><span class="s2">แนะนำจากรุ่นนี้</span><span class="s1">)&lt;/option&gt;'; </span></p>
+<p class="p1"><span class="s1">  $('tapCustomRow').style.display='none'; </span></p>
+<p class="p1"><span class="s1">  $('kCount').textContent='-'; $('kSpacing').textContent='-'; $('kTap').textContent='-'; $('kTotalW').textContent='-'; </span></p>
+<p class="p1"><span class="s1">  $('kAmpRec').textContent='-'; $('summary').textContent=''; </span></p>
+<p class="p1"><span class="s1">  drawRoom(12,18,[],'m'); </span></p>
+<p class="p1"><span class="s1">}); </span></p>
+<p class="p1"><span class="s1">drawRoom(12,18,[],'m'); </span></p>
+<p class="p1"><span class="s1">&lt;/script&gt; </span></p>
+<p class="p1"><span class="s1">&lt;/body&gt; </span></p>
+<p class="p1"><span class="s1">&lt;/html&gt; </span></p>
+</body>
+</html>
