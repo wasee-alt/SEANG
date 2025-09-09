@@ -8,7 +8,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1" /> 
 
-<title>S.E.A.N.G • ProPlugin (On-wall & Ceiling • Quality Levels + Dynamic Tap)</title> 
+<title>S.E.A.N.G • ProPlugin (Surface/On-wall & Ceiling Quality Levels + Dynamic Tap)</title> 
 
 <style> 
 
@@ -66,9 +66,9 @@ button.secondary{background:#1f2937}
 
 <header> 
 
-  <h1>S.E.A.N.G (Simple Estimator for Audio Network Grid)</h1> 
+  <h1>S.E.A.N.G ( Sound Engineering Agent Next-Gen AI)</h1> 
 
-  <div style="margin-left:auto; font-size:12px;opacity:.75">On-wall & Ceiling • Quality levels • Dynamic Tap</div> 
+  <div style="margin-left:auto; font-size:12px;opacity:.75">ProPlugin • Surface/On-wall & Ceiling Levels</div> 
 
 </header> 
 
@@ -176,7 +176,7 @@ button.secondary{background:#1f2937}
 
         </div> 
 
-        <div class="note">เลือกแบรนด์/รุ่น → ระบบจะตั้งค่า <b>ชนิด/coverage/sensitivity</b> และ <b>ชุด Tap</b> ของรุ่นนั้นให้อัตโนมัติ</div> 
+        <div class="note">เลือกแบรนด์/รุ่น → ระบบจะตั้งค่าชนิด/มุมครอบคลุม/ความไว และ <b>ชุด Tap</b> ของรุ่นนั้นให้อัตโนมัติ</div> 
 
       </fieldset> 
 
@@ -196,9 +196,9 @@ button.secondary{background:#1f2937}
 
               <option value="ceiling">Ceiling</option> 
 
-              <option value="surface">Surface-mount / On-wall</option> 
+              <option value="pendant">Pendant</option> 
 
-              <option value="pendant">Pendant (สำรอง)</option> 
+              <option value="surface">Surface-mount / On-wall</option> 
 
             </select> 
 
@@ -206,15 +206,15 @@ button.secondary{background:#1f2937}
 
           <div> 
 
-            <label>ระดับคุณภาพเสียง</label> 
+            <label>ระดับคุณภาพเสียง (เฉพาะ Ceiling)</label> 
 
             <select id="quality"> 
 
-              <option value="high" selected>สูง</option> 
+              <option value="high" selected>สูง (start=H/2, step=H)</option> 
 
-              <option value="mid">ปานกลาง</option> 
+              <option value="mid">ปานกลาง (start=H, step=1.5H)</option> 
 
-              <option value="low">ต่ำ / budget</option> 
+              <option value="low">ต่ำ/budget (start=H, step=2H)</option> 
 
             </select> 
 
@@ -334,69 +334,31 @@ function showErr(m){$('err').style.display='block';$('err').textContent=m;}
 
 function clearErr(){$('err').style.display='none';} 
 
-const HEADROOM = 1.25; 
+const HEADROOM = 1.25; // 25% headroom 
 
-const AMP_STEPS = [30, 60, 100, 120, 150, 240, 300, 350, 500, 600, 1000]; 
-
- 
-
-// สเปซซิ่งแบบช่วง (on-wall) ให้เว้นเท่า ๆ กันโดยบังคับปลายอยู่ที่ 0 และ L 
-
-function equalSpacingInRange(L, minS, maxS, target){ 
-
-  let n = Math.max(2, Math.round(L/target)+1); 
-
-  // ปรับ n จน spacing อยู่ในช่วง 
-
-  while(true){ 
-
-    const S = L/(n-1); 
-
-    if(S > maxS){ n++; continue; } 
-
-    if(S < minS && n>2){ n--; continue; } 
-
-    return {n, S: L/(n-1)}; 
-
-  } 
-
-} 
-
-function getBounds(pts){ 
-
-  let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity; 
-
-  for(const p of pts){ if(p.x<minX)minX=p.x; if(p.x>maxX)maxX=p.x; if(p.y<minY)minY=p.y; if(p.y>maxY)maxY=p.y; } 
-
-  return {minX,maxX,minY,maxY}; 
-
-} 
-
-function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); } 
+const AMP_STEPS = [30, 60, 100, 120, 150, 240, 300, 350, 500, 600, 1000]; // ตัวอย่างไซส์มาตรฐาน 
 
  
 
-// ========= PRESETS (ตัวอย่าง—ปรับตามสเปกจริงได้) ========= 
+// ========= Presets (เริ่มต้น — เพิ่มจากสเปกจริงได้) ========= 
 
-// Optimal Audio: Up series (รวม Up4O/Up6O), Cuboid TX (Surface) 
+// Optimal Audio: Up series (ceiling), Cuboid TX (surface) 
 
-// HH: TNi-w (Surface), TNi-c & APT (Ceiling รวม APT-C4) 
+// HH: TNi series (ceiling), APT series (ceiling) — เพิ่ม/แก้ค่าตามสเปกจริงได้ 
 
 const PRESETS={ 
 
   optimal:{label:'Optimal Audio',models:{ 
 
-    'Up 2 (Ceiling)': {type:'ceiling', coverage:120, sens:85, taps:'1.5,3,6,12'}, 
+    // Up series (ตัวอย่างค่า) 
 
-    'Up 3 (Ceiling)': {type:'ceiling', coverage:120, sens:86, taps:'1.5,3,6,12'}, 
+    'Up 3 (Ceiling)':{type:'ceiling',coverage:120,sens:86,taps:'1.5,3,6,12'}, 
 
-    'Up 4 (Ceiling)': {type:'ceiling', coverage:120, sens:87, taps:'3.2,6.3,12.5,25'}, 
+    'Up 4 (Ceiling)':{type:'ceiling',coverage:120,sens:87,taps:'3.2,6.3,12.5,25'}, 
 
-    'Up 4O (Ceiling)':{type:'ceiling', coverage:120, sens:87, taps:'3.2,6.3,12.5,25'}, 
+    'Up 6 (Ceiling)':{type:'ceiling',coverage:110,sens:90,taps:'7.5,15,30,60'}, 
 
-    'Up 6 (Ceiling)': {type:'ceiling', coverage:110, sens:90, taps:'7.5,15,30,60'}, 
-
-    'Up 6O (Ceiling)':{type:'ceiling', coverage:110, sens:90, taps:'7.5,15,30,60'}, 
+    // Cuboid TX (เฉพาะ TX) — on-wall 
 
     'Cuboid 3TX (Surface)':{type:'surface',coverage:90,sens:86,taps:'7.5,15,30'}, 
 
@@ -408,27 +370,25 @@ const PRESETS={
 
   hh:{label:'HH',models:{ 
 
-    'TNi-w4 (Surface)':{type:'surface',coverage:90,sens:86,taps:'7.5,15,30'}, 
+    // TNi series (ceiling) 
 
-    'TNi-w6 (Surface)':{type:'surface',coverage:90,sens:88,taps:'15,30,60'}, 
+    'TNi-C6 (Ceiling)':{type:'ceiling',coverage:120,sens:89,taps:'7.5,15,30,60'}, 
 
-    'TNi-w8 (Surface)':{type:'surface',coverage:90,sens:89,taps:'15,30,60'}, 
+    'TNi-C8 (Ceiling)':{type:'ceiling',coverage:120,sens:91,taps:'10,20,40,60'}, 
 
-    'TNi-c4 (Ceiling)': {type:'ceiling',coverage:120,sens:88,taps:'5,10,20,40'}, 
+    // APT series (ceiling) 
 
-    'TNi-c6 (Ceiling)': {type:'ceiling',coverage:120,sens:89,taps:'7.5,15,30,60'}, 
+    'APT-C6 (Ceiling)':{type:'ceiling',coverage:120,sens:90,taps:'7.5,15,30,60'}, 
 
-    'TNi-c8 (Ceiling)': {type:'ceiling',coverage:120,sens:91,taps:'10,20,40,60'}, 
-
-    'APT-C4 (Ceiling)':  {type:'ceiling',coverage:120,sens:88,taps:'5,10,20,40'}, 
-
-    'APT-C6 (Ceiling)':  {type:'ceiling',coverage:120,sens:90,taps:'7.5,15,30,60'}, 
-
-    'APT-C8 (Ceiling)':  {type:'ceiling',coverage:120,sens:92,taps:'10,20,40,60'} 
+    'APT-C8 (Ceiling)':{type:'ceiling',coverage:120,sens:92,taps:'10,20,40,60'} 
 
   }} 
 
 }; 
+
+ 
+
+// เก็บ taps ปัจจุบันของรุ่น 
 
 let currentModelTaps = []; 
 
@@ -452,11 +412,15 @@ function refreshModels(){
 
 } 
 
+ 
+
 function populateTapSelectFromModel(preset){ 
 
   const tapSel = $('tapSelect'); tapSel.innerHTML = ''; 
 
   const optAuto = document.createElement('option'); optAuto.value = 'auto'; optAuto.textContent = 'Auto (แนะนำจากรุ่นนี้)'; tapSel.appendChild(optAuto); 
+
+ 
 
   currentModelTaps = []; 
 
@@ -492,11 +456,15 @@ function populateTapSelectFromModel(preset){
 
 } 
 
+ 
+
 function applyModel(){ 
 
   const b=$('brand').value,m=$('model').value;if(!b||!m) return; 
 
   const p=PRESETS[b]?.models?.[m]; if(!p) return; 
+
+ 
 
   $('spkType').value=p.type||'ceiling'; 
 
@@ -504,17 +472,27 @@ function applyModel(){
 
   if(p.sens!=null) $('sens').value=p.sens; 
 
+ 
+
   populateTapSelectFromModel(p); 
 
   toggleTapCustom(); 
 
 } 
 
+ 
+
+// แสดง/ซ่อน custom tap 
+
 function toggleTapCustom(){ 
 
   $('tapCustomRow').style.display = ($('tapSelect').value==='custom') ? 'grid' : 'none'; 
 
 } 
+
+ 
+
+// ดึงชุด taps ที่พร้อมใช้ ณ ตอนคำนวณ 
 
 function getActiveTapArray(){ 
 
@@ -564,6 +542,8 @@ function layout(){
 
  
 
+  // Base geometry (สำหรับกรณีทั่วไป/สำรอง) 
+
   const dVert=Math.max(0.6, H - listenerH); 
 
   const D=2*dVert*Math.tan(toRad(theta/2)); 
@@ -574,8 +554,6 @@ function layout(){
 
   const type=$('spkType').value; 
 
-  const q=$('quality').value; 
-
   let pts=[];  
 
   let spacingShown=null; 
@@ -584,29 +562,29 @@ function layout(){
 
   if(type==='surface'){ 
 
-    // --- On-wall: ซ้าย–ขวาเท่านั้น, เริ่มที่ "มุมห้อง", ห้ามกลางห้อง/ผนังด้านกว้าง --- 
+    // --- Surface/On-wall: ผนังซ้าย–ขวาเท่านั้น, ห้ามกึ่งกลางห้อง/ผนังด้านกว้าง --- 
 
-    let minS, maxS, target; 
+    // ระยะตามแนวยาว 4–6 m ตามความยาวห้อง 
 
-    if(q==='high'){ minS=4; maxS=5; target=4.5; } 
+    const minS=4, maxS=6; 
 
-    else if(q==='mid'){ minS=6; maxS=8; target=7; } 
+    const nLow=Math.ceil(L/maxS)+1; 
 
-    else { minS=8; maxS=10; target=9; } 
+    const nHigh=Math.max(2, Math.floor(L/minS)+1); 
 
- 
+    let n=Math.max(2, Math.round(L/5)+1); 
 
-    // สร้างระยะเว้นเท่า ๆ กันโดยบังคับ y=0 และ y=L เป็นจุดแรก/สุดท้าย (เริ่มที่มุม) 
+    n=Math.min(Math.max(n, nLow), nHigh); 
 
-    const {n, S} = equalSpacingInRange(L, minS, maxS, target); 
+    const spacingWall=(n>1)?(L/(n-1)):L; 
 
-    spacingShown = S; 
+    spacingShown=spacingWall; 
 
  
 
     for(let i=0;i<n;i++){ 
 
-      const y=i*S; 
+      const y=i*spacingWall; 
 
       pts.push({x:0, y}); // ผนังซ้าย 
 
@@ -614,23 +592,25 @@ function layout(){
 
     } 
 
-    // ไม่วางบนผนังด้านกว้าง (บน/ล่าง) และไม่มีกลางห้องอยู่แล้ว 
-
   } 
 
   else if(type==='ceiling'){ 
 
-    // --- Ceiling: 3 ระดับ + Centering --- 
+    // --- Ceiling: 3 ระดับคุณภาพเสียง + Centering --- 
 
     let start, step; 
+
+    const q=$('quality').value; 
 
     if(q==='high'){ start=H/2; step=H; } 
 
     else if(q==='mid'){ start=H; step=1.5*H; } 
 
-    else { start=H; step=2*H; } 
+    else { start=H; step=2*H; } // low/budget 
 
  
+
+    // วางจุดแบบกริด (square/hex) จาก start/step และเว้นผนังตาม start 
 
     const lay=$('layout').value; 
 
@@ -646,51 +626,113 @@ function layout(){
 
       for(const y of ys){ for(const x of xs){ pts.push({x, y}); } } 
 
-      // Centering ภายในขอบ start..W-start / start..L-start 
+ 
 
-      const b = getBounds(pts); 
+      // Centering: จัดให้อยู่กึ่งกลางพื้นที่ห้อง (ภายในขอบ start..W-start / start..L-start) 
 
-      const dx = clamp(W/2 - (b.minX+b.maxX)/2, start - b.minX, (W - start) - b.maxX); 
+      const bounds = getBounds(pts); 
 
-      const dy = clamp(L/2 - (b.minY+b.maxY)/2, start - b.minY, (L - start) - b.maxY); 
+      const cx = (bounds.minX + bounds.maxX) / 2; 
 
-      pts = pts.map(p=>({x:p.x+dx, y:p.y+dy})); 
+      const cy = (bounds.minY + bounds.maxY) / 2; 
+
+      const dx = (W/2 - cx); 
+
+      const dy = (L/2 - cy); 
+
+ 
+
+      // จำกัดการเลื่อนเพื่อไม่ให้ทะลุระยะเว้นผนัง 
+
+      const minAllowedDx = (start - bounds.minX); 
+
+      const maxAllowedDx = (W - start - bounds.maxX); 
+
+      const minAllowedDy = (start - bounds.minY); 
+
+      const maxAllowedDy = (L - start - bounds.maxY); 
+
+      const dxClamped = clamp(dx, minAllowedDx, maxAllowedDx); 
+
+      const dyClamped = clamp(dy, minAllowedDy, maxAllowedDy); 
+
+ 
+
+      pts = pts.map(p=>({x:p.x+dxClamped, y:p.y+dyClamped})); 
 
       spacingShown = step; 
 
     }else{ 
 
-      const s=step, dy=s*Math.sqrt(3)/2; 
+      // hex layout: ระยะ step ใช้กับแกน x; ระยะระหว่างแถว = step*sqrt(3)/2 
 
-      let y=start, row=0; 
+      const s = step, dy = s*Math.sqrt(3)/2; 
 
-      while(y<=L-start+1e-9){ 
+      // สร้างแถวเริ่มที่ y=start จนถึง L-start 
 
-        const offsetX = (row%2===1)? s/2 : 0; 
+      let y = start; 
 
-        let x=start+offsetX; 
+      while (y <= L - start + 1e-9) { 
 
-        while(x<=W-start+1e-9){ 
+        // คอลัมน์ในแถวนั้น 
 
-          pts.push({x,y}); 
+        const offsetX = (Math.round((y-start)/dy) % 2 === 1) ? s/2 : 0; 
 
-          x+=s; 
+        // หาคอลัมน์ตั้งแต่ start..W-start 
+
+        let x = start + offsetX; 
+
+        while (x <= W - start + 1e-9) { 
+
+          pts.push({x, y}); 
+
+          x += s; 
 
         } 
 
-        y+=dy; row++; 
+        y += dy; 
 
       } 
 
-      if(pts.length===0) pts.push({x:clamp(W/2,start,W-start), y:clamp(L/2,start,L-start)}); 
+      if(pts.length===0){ 
 
-      const b = getBounds(pts); 
+        // สำรองกรณีห้องเล็กมาก 
 
-      const dx = clamp(W/2 - (b.minX+b.maxX)/2, start - b.minX, (W - start) - b.maxX); 
+        pts.push({x:clamp(W/2, start, W-start), y:clamp(L/2, start, L-start)}); 
 
-      const dyc= clamp(L/2 - (b.minY+b.maxY)/2, start - b.minY, (L - start) - b.maxY); 
+      } 
 
-      pts = pts.map(p=>({x:p.x+dx, y:p.y+dyc})); 
+ 
+
+      // Centering (เหมือน square) 
+
+      const bounds = getBounds(pts); 
+
+      const cx = (bounds.minX + bounds.maxX) / 2; 
+
+      const cy = (bounds.minY + bounds.maxY) / 2; 
+
+      const dx = (W/2 - cx); 
+
+      const dy2 = (L/2 - cy); 
+
+ 
+
+      const minAllowedDx = (start - bounds.minX); 
+
+      const maxAllowedDx = (W - start - bounds.maxX); 
+
+      const minAllowedDy = (start - bounds.minY); 
+
+      const maxAllowedDy = (L - start - bounds.maxY); 
+
+      const dxClamped = clamp(dx, minAllowedDx, maxAllowedDx); 
+
+      const dyClamped = clamp(dy2, minAllowedDy, maxAllowedDy); 
+
+ 
+
+      pts = pts.map(p=>({x:p.x+dxClamped, y:p.y+dyClamped})); 
 
       spacingShown = step; 
 
@@ -700,7 +742,7 @@ function layout(){
 
   else{ 
 
-    // (สำรอง) กริดทั่วไป: เว้นผนัง H แล้วใช้ spacingBase 
+    // (เผื่อ) กริดทั่วไป: เว้นผนัง H รอบด้าน แล้วใช้ spacingBase 
 
     const wallMargin=H; 
 
@@ -760,7 +802,7 @@ function layout(){
 
   const tapSelVal = $('tapSelect').value; 
 
-  const P_req = 1.5; // placeholder 
+  const P_req = 1.5; // placeholder; ปรับสูตรตาม SPL Target ได้ภายหลัง 
 
  
 
@@ -812,7 +854,11 @@ function layout(){
 
  
 
-  $('summary').innerHTML=`รุ่น <b>${$('model').value||'-'}</b> • ชนิด <b>${type}</b> • จุด <b>${count}</b>`; 
+  const modelText = $('model').value || '-'; 
+
+  const typeText = $('spkType').value; 
+
+  $('summary').innerHTML=`รุ่น <b>${modelText}</b> • ชนิด <b>${typeText}</b> • จุด <b>${count}</b>`; 
 
 } 
 
@@ -822,13 +868,25 @@ function pickAmpSize(w){
 
   for(const s of AMP_STEPS){ if(s>=w-1e-6) return s; } 
 
-  return Math.ceil(w/100)*100; 
+  return Math.ceil(w/100)*100; // ถ้าเกิน list ให้ปัดขึ้นทีละ 100 W 
 
 } 
 
  
 
-// วาดห้อง/จุด 
+function getBounds(pts){ 
+
+  let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity; 
+
+  for(const p of pts){ if(p.x<minX)minX=p.x; if(p.x>maxX)maxX=p.x; if(p.y<minY)minY=p.y; if(p.y>maxY)maxY=p.y; } 
+
+  return {minX,maxX,minY,maxY}; 
+
+} 
+
+function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); } 
+
+ 
 
 function drawRoom(Wm,Lm,pts,u,type='ceiling'){ 
 
@@ -850,7 +908,7 @@ function drawRoom(Wm,Lm,pts,u,type='ceiling'){
 
  
 
-  // ขอบห้อง 
+  // เส้นขอบห้อง 
 
   ctx.strokeStyle='#475569'; ctx.lineWidth=2; 
 
@@ -858,7 +916,7 @@ function drawRoom(Wm,Lm,pts,u,type='ceiling'){
 
  
 
-  // เน้นผนังซ้าย/ขวาในโหมด surface 
+  // เน้นผนังซ้าย/ขวาในโหมด surface (บอกให้รู้ว่าติดผนังเท่านั้น) 
 
   if(type==='surface'){ 
 
@@ -928,6 +986,16 @@ $('listenerPreset').addEventListener('change', e=>{
 
 $('tapSelect').addEventListener('change', toggleTapCustom); 
 
+$('spkType').addEventListener('change', ()=>{ 
+
+  // เปิด/ปิดตัวเลือกคุณภาพเมื่อสลับชนิดลำโพง 
+
+  const dis = ($('spkType').value!=='ceiling'); 
+
+  $('quality').disabled = dis; 
+
+}); 
+
 $('calcBtn').addEventListener('click', layout); 
 
 $('clearBtn').addEventListener('click', ()=>{ 
@@ -955,3 +1023,5 @@ drawRoom(12,18,[],'m');
 </body> 
 
 </html> 
+
+ 
